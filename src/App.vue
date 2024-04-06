@@ -1,85 +1,80 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+
+import Header from './components/Header.vue';
+import Quote from './components/Quote.vue';
+import translate from "translate";
+
+translate.engine = 'deepl';
+translate.key = 'a11d21a1-adec-455e-ab19-9bc16dcaf748:fx';
+
+export default {
+  name: 'App',
+  components: {
+    Header,
+    Quote,
+  },
+  data() {
+    return {
+      quote: {
+        //content: 'Content goes here...',
+        content: 'Frase',
+        anime: 'Serie',
+        character: 'Personaje',
+      },
+      quotes: []
+    }
+  },
+  methods: {
+    async getQuote() {
+      //const data = await fetch('https://animechan.vercel.app/api/random').
+      const data = await fetch('https://animechan.xyz/api/random').then(res => res.json()); //Cargar como json una API pública
+      const translatedQuote = await translate(data.quote,'es');
+
+      this.quote = {
+        content: translatedQuote,
+        anime: data.anime,
+        character: data.character
+      };
+    }
+  },
+  created() {
+    //this.getQuote();
+  }
+}
+
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <div class="app">
+    <Header title="Generador de Frases"/> <!-- Se añade un valor del title dentro de Header.vue -->
+    <Quote :quote="quote" />
+    <div class="grid place-items-center mt-12">
+      <button @click="getQuote"
+      class="w-40 py-2 bg-red-600 text-white rounded-3xl hover:bg-red-500
+      font-bold text-lg mt-4"
+      >Generar</button>
     </div>
-  </header>
+  </div>
 
-  <RouterView />
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<style lang="scss">
+
+:root {
+  --primary: #D81E5B;
+  --secondary: #8A4FFF;
+  --tertiary: #32CBFF;
+  --dark: #131A26;
+  --light: #EEE;
+  --grey: #848484;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Fira Sans, sans-serif';
 }
 </style>
