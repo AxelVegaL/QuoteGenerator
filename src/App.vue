@@ -26,7 +26,7 @@ export default {
   },
   methods: {
     async getQuote() {
-      //const data = await fetch('https://animechan.vercel.app/api/random').
+      //const data = await fetch('https://animechan.vercel.app/api/random'). //API ya no disponible :c
       const data = await fetch('https://animechan.xyz/api/random').then(res => res.json()); //Cargar como json una API pública
       const translatedQuote = await translate(data.quote,'es');
 
